@@ -1,11 +1,14 @@
 package br.ufrpe.flight_system.negocio;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import br.ufrpe.flight_system.dados.IRepositorioGenerico;
 import br.ufrpe.flight_system.dados.RepositorioGenerico;
 import br.ufrpe.flight_system.exception.ElementoJaExisteException;
 import br.ufrpe.flight_system.exception.ElementoNaoExisteException;
+import br.ufrpe.flight_system.exception.VooInvalidoException;
 import br.ufrpe.flight_system.negocio.beans.Cidade;
 import br.ufrpe.flight_system.negocio.beans.Voo;
 
@@ -25,17 +28,33 @@ public class ControladorVoos {
         return instance;
     }
 
-    public void inserir(Voo obj) throws ElementoJaExisteException {
+    public void inserir(Voo obj) throws ElementoJaExisteException , VooInvalidoException {
         //TODO Implementar regra de negócio a seguir
         // Um voo somente poderá ser adicionado se sua data/hora de saída
         // for anterior a sua data/hora estimada de chegada. Além disso, a sua
         // data/hora de saída não pode ser anterior a data/hora corrente
+    	ZonedDateTime horaAtual = ZonedDateTime.now();
+    	
+    	if (obj.getHorarioSaida().isAfter(obj.getHorarioEstimadoChegada()) ) {
+    		
+    		if(horaAtual.isAfter(obj.getHorarioSaida())) {
+    			
+    			repositorioVoos.inserir(obj);
+    			
+    		}
+    		
+    	}else {
+    		
+    		VooInvalidoException vooInv = new VooInvalidoException(obj);
+    		
+    		throw vooInv;
+    	}
         
         // OBSERVAÇÃO: se necessário, crie e arremesse uma exceção para manipular 
         // essa situação de tentar inserir um voo inválido e atualize o método 
         // que invoca este método para tratar a exceção e apresentar mensagem 
         // de erro para o usuário.
-        repositorioVoos.inserir(obj);
+        
     }
 
     public List<Voo> listar() {

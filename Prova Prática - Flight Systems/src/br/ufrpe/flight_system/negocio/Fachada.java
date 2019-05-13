@@ -6,6 +6,7 @@ import br.ufrpe.flight_system.exception.AssentoInvalidoException;
 import br.ufrpe.flight_system.exception.AssentoJaMarcadoException;
 import br.ufrpe.flight_system.exception.ElementoJaExisteException;
 import br.ufrpe.flight_system.exception.ElementoNaoExisteException;
+import br.ufrpe.flight_system.exception.VooInvalidoException;
 import br.ufrpe.flight_system.negocio.beans.Bilhete;
 import br.ufrpe.flight_system.negocio.beans.Cidade;
 import br.ufrpe.flight_system.negocio.beans.Passageiro;
@@ -56,7 +57,7 @@ public class Fachada {
         return controladorBilhetes.listarBilhetesPorVoo(v);
     }
 
-    public void inserir(Voo obj) throws ElementoJaExisteException {
+    public void inserir(Voo obj) throws ElementoJaExisteException, VooInvalidoException {
         controladorVoos.inserir(obj);
     }
 
